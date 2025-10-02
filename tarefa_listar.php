@@ -31,6 +31,35 @@
                                 <td>Responsável</td>
                             </tr>
 
+                            <?php
+
+                            //1º PASSO: Montar o comando SQL que será executado
+                            $sql = "SELECT * FROM tarefa ORDER BY data_entrega DESC";
+                            //2º PASSO: Preparar o comando para ser executado na conexão de dados
+                            $comando = $conexao->prepare($sql);
+                            //3º PASSO: Executar o comando
+                            $comando->execute();
+                            //4º PASSO: Capturar os resultados trazidos pelo MYSQL
+                            $resultado = $comando->get_result();
+                            
+                            //5º PASSO: Pegar todas as linhas de dados que estão em RESULTADO
+                            while($registro = $resultado->fetch_assoc())
+                            {
+                                $descricao = $registro["descricao"];
+                                $data_entrega = $registro["data_entrega"];
+                                $prioridade = $registro["prioridade"];
+                                $responsavel = $registro["responsavel"];
+     
+                            ?>
+                            <tr>
+                                <td><?php echo $descricao ?></td>
+                                <td><?php echo $data_entrega ?></td>
+                                <td><?php echo $prioridade ?></td>
+                                <td><?php echo $responsavel ?></td>
+                            </tr>
+                            
+                            <?php } ?>
+
 
                         </table>
                     </div>
