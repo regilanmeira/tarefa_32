@@ -11,6 +11,62 @@
 </head>
 
 <body>
+    <?php
+        //1º PASSO: Criar variáveis para armazenar
+        //os dados retornados pelo comando SELECT
+
+        $id = $_POST["txtId"]; //O ID foi informado na página de PESQUISAR
+        $descricao = "";
+        $data_entrega = "";
+        $prioridade = "";
+        $responsavel = "";
+
+        //2º PASSO: Construir o comando SQL - SELECT
+        $sql = "SELECT * FROM tarefa WHERE id = ?";
+
+        //3º PASSO: Preparar o comando SQL para ser executado
+        //na conexão
+        $comando = $conexao->prepare($sql);
+
+        //4º PASSO: Associar os valores dos parâmetros do comando SQL
+        $comando->bind_param("i",$id);
+
+        //5º PASSO: Executar o comando SQL
+        $comando->execute();
+
+        //OBS: Como um comando SELECT traz um retorno
+        //de dados, precisamos guardar os resultados em uma variável
+
+        $resultado = $comando->get_result();
+        if ($resultado->num_rows <= 0)
+        {
+            echo "<h1>Esta tarefa não foi cadastrada!</h1>";
+        }
+        else
+        {
+            //OBS: Como um comando SELECT pode retornar
+            //várias linhas de registro, precisamos
+            //capturar linha por linha dos valores 
+            //que estão em resultado
+
+            //Pega uma linha/registro retornado
+            $registro = $resultado->fetch_assoc();
+
+            //Preenche as variáveis com o que o SELECT retornou
+            $descricao = $registro["descricao"];
+            $data_entrega = $registro["data_entrega"];
+            $prioridade = $registro["prioridade"];
+            $responsavel = $registro["responsavel"];
+
+            echo $descricao;
+            echo $responsavel;
+
+            //PRÓXIMA AULA: COLOCAR OS VALORES NAS CAIXINHAS(input)
+
+
+        }
+
+    ?>
     <form method="post">
     <div class="container">
         <div class="row">
